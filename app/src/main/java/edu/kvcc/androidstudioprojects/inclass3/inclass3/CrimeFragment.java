@@ -11,13 +11,17 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 
 public class CrimeFragment extends Fragment {
     private Crime mCrime;                           // create aclass level variable
 
-
+    private Button mDateButton;             // CHPT 8 added
+    private CheckBox mSolvedCheckbox;
 
 
     private EditText mTitleField;
@@ -63,6 +67,21 @@ public class CrimeFragment extends Fragment {
                     // blank!!
             }
         });
+
+        mDateButton = (Button)v.findViewById((R.id.crime_date));                // added w/ ch 8 (p153) t wire up the buttons widgets:    // puts date on the button
+        mDateButton.setText(mCrime.getDate().toString());                    // uses date from Crime.Java   mDate = new Date();
+        mDateButton.setEnabled(false);
+
+        mSolvedCheckbox = (CheckBox)v.findViewById(R.id.crime_solved);
+        mSolvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {   // checkbox is child of the compound button class.. hence new CompoundButton
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                mCrime.setSolved(isChecked);                // sets the crime's solved property - checks and unchecks the button when changed.
+            }
+        });
+
+
+
         return v;
     }
 }
