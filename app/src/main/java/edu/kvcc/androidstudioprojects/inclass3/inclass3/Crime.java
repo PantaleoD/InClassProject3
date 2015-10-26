@@ -1,4 +1,4 @@
-package edu.kvcc.androidstudioprojects.inclass3.inclass3;
+package edu.kvcc.androidstudioprojects.inclass3.inclass3;  // the MODEL view
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ public class Crime {
                                 // if from a db - replaces with db id #
     private  String mTitle;    //
 
-       public Crime(){      // default constructor
+    public Crime(){      // default constructor
 
            mID = UUID.randomUUID();    // makes anew unique id for this particular crime
        }
