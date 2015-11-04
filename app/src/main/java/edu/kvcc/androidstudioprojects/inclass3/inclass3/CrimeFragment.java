@@ -18,7 +18,10 @@ import android.widget.EditText;
 
 
 public class CrimeFragment extends Fragment {
-    private Crime mCrime;                           // create aclass level variable
+
+//  private  EditText mEditText;
+
+    private Crime mCrime;                           // create a class level variable
 
     private Button mDateButton;             // CHPT 8 added
     private CheckBox mSolvedCheckbox;

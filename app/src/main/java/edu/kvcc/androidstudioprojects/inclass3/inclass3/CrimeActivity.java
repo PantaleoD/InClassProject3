@@ -1,5 +1,5 @@
 package edu.kvcc.androidstudioprojects.inclass3.inclass3;
-
+// FOR A SINZGLE CRIE
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;   // this was handled in the gradle app
@@ -7,8 +7,13 @@ import android.support.v4.app.FragmentManager;    // support version of the frag
 import android.os.Bundle;
 
 //public class CrimeActivity extends FragmentActivity {   take out in chpt 9 and replace w/
-public class CrimeActivity extends SingleFragmentActivity{
-
+public class CrimeActivity extends SingleFragmentActivity{         // the single fragment activity.... will inherit from the abstract activity called
+    @Override                      // added w Ch 9 - and Abstract Class called SingleFragmentActivity
+//              bc done each time... easier to use ONE fragment activity!   so use an abstract class                                                              // singlefragmentactivity
+    protected Fragment createFragment(){
+        return  new CrimeFragment();
+             }
+}
  /*   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +49,8 @@ public class CrimeActivity extends SingleFragmentActivity{
                                         // code above to show the 2 frames w/in the 1 view - fragment fragment2
 */
 
-@Override                                                       // added w Ch 9 - and Abstract Class called SingleFragmentActivity
-protected Fragment createFragment(){
-return  new CrimeFragment();
-}
-}
+
+
 
 
 
