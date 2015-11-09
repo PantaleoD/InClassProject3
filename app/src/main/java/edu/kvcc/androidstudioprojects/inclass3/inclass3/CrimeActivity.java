@@ -13,16 +13,26 @@ import java.util.UUID;
 //public class CrimeActivity extends FragmentActivity {              take out in chpt 9 and replace w/
 
 public class CrimeActivity extends SingleFragmentActivity{         // the single fragment activity.... will inherit from the abstract activity called
-    //                                                            CHPT 10 p195  crash and burn....
-    private static final String EXTRA_CRIME_ID =    //              change from public to 'private' w/ pg 199 chpt and attaching arguments to a fragment
-            "edu.kvcc.androidstudioprojects.inclass3.inclass3.crime_id";
 
-    public static Intent newIntent(Context packageContext, UUID crimeId){
-        Intent intent = new Intent(packageContext, CrimeActivity.class);
-        intent.putExtra(EXTRA_CRIME_ID, crimeId);
-        return intent;
+   // THIS SETS UP A STING CONST FOR THE KEY PART OF THE 'EXTRA'
+    //                                                            CHPT 10 p195   .
+    private static final String EXTRA_CRIME_ID =    //              change from public to 'private' w/ pg 199 chpt and attaching arguments to a fragment - only used in this class
+            "edu.kvcc.androidstudioprojects.inclass3.inclass3.crime_id";  //  TYPE W/O QUOTES AND IT WILL SUGGEST WHAT NEED..INTELLISENSE WILL HELP
+//                                                                          crime_id is new and made up...use path so doesn't conflict w/ other things that may be floating about
+    //                                                                      AND WILL BE THE 'KEY' TO BE ACCESSABLE FROM O/SD THE CLASS
+    // THIS IS THE METHOD TO ACCEPT THE DATA FROM THE INTENT...VARIABLE ABOVE
+
+
+    //        CONVENTION.... IF CLASS Context, uses lowercase for class name 'context'... this doesn't
+    //       THIS IS A PUBLC AND STATIC SO THAT any OTHER ACTIVY OR FRAGMENT THAT MIGHT
+    //          WANT TO START THIS aCTIVITY CAN GET A PROPERLY FORMATTED INTENT THAT WILL
+    //          ALLOW THIS ACTIVITY TO START SUCCESFULLY.
+    public static Intent newIntent(Context packageContext, UUID crimeId){        // crimeId
+        Intent intent = new Intent(packageContext, CrimeActivity.class);   // looks same as in CrimeActivity.java - MAKES NEW INTENT
+        intent.putExtra(EXTRA_CRIME_ID, crimeId);                       // now can put the extra...        PUT PASSED IN crimeId     AS AN EXTRA USING THE KEY DECLARED ABOVE
+        return intent;                                                  // and returnS the intent
     }
-
+// starts w/ the crime activity... .and gets the info that is needed
 
 
     @Override                      // added w Ch 9 - and Abstract Class called SingleFragmentActivity
@@ -30,12 +40,21 @@ public class CrimeActivity extends SingleFragmentActivity{         // the single
 //                                      singlefragmentactivity
     protected Fragment createFragment(){
      //   return  new CrimeFragment();            // take out w/ ch 10 pg 199 and add next lines to }
+
+
+
+     /* return is to return a CrimeFragment that is created by calling the static method on CrimeFragment
+        * called newInstance. the method take sin a UUID, and then returns a new instance of the Crime Fragment
+         * By getting the UUID from teh Extras of the intent above, and then sending it over to the fragment through this method, we have
+         * decoupled the fragment from the activity              */
+
         UUID crimeId = (UUID) getIntent()
-                        .getSerializableExtra(EXTRA_CRIME_ID);
+                        .getSerializableExtra(EXTRA_CRIME_ID);      // pass  the UUID value form the intent (just call the Intent
+                                                                    // and now calling the new method creatd in CrimeFragment...next chg a few things in CrimeFragment to see it
         return CrimeFragment.newInstance(crimeId);
              }
  }
- /*   @Override
+ /*   @Override                                                     // taken out of here and moved to _____________________________
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);                // inflates activity (w/ fragment...

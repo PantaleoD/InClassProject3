@@ -47,6 +47,10 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
                                     // and pass it the context
                                     //   which it needs to operate it.  The context is passed by  using  the getActivity method.
                                     // Which gets the activity that is hosting this fragment.
+
+        // GET ACTIVITY()METHOD IN A FRAGMENT ... CONNECTED IWTH THE FRAMENT/ACTIVITY THAT IS HOSTING THE FRAGMENT
+
+
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));  // must set layout manager..because it doesn't know how to
                                     // display and the provided layout manager is provided for you by android
                                     // get activity () gets the activity thta's hosting the fragment (CrimeListActivity in our case)
@@ -154,6 +158,7 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
                         itemView.findViewById(R.id.list_item_crime_date_text_view);
                 mSolvedCheckBox = (CheckBox)
                         itemView.findViewById(R.id.list_item_crime_solved_check_box);
+                // COULD DISABLE CHECKBOXES HERE TOO W/ mSolvedCheckBox.setEnabled(false); - did it in list_item_crime.xml
             }
 
 // Method to take in an instance of a crime, assign it to the class level version. Then use the classs level version to take
@@ -161,6 +166,7 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
 
             public void bindCrime(Crime crime) {
                  mCrime = crime;                                 // variable bc has to outlive this method...
+                //                          made line above because w/intent and view holders...it's available!!! mCrime declared at top! class level!
                  mTitleTextView.setText(mCrime.getmTitle());     // set all the values for display
                  mDateTextView.setText(mCrime.getDate().toString());
                  mSolvedCheckBox.setChecked(mCrime.isSolved());
@@ -182,9 +188,18 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
   //                  .show();
       //      Intent intent = new Intent(getActivity(), CrimeActivity.class);       // dch 10 explicit intent replace
             //                  once create new intent method in CrimeAcdtivity.java with:
-            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getmID());
-            startActivity(intent);
 
+            // HOW SEND DATA FROM INTENT?  EXTRAS...WHERE DOES THAT OCCUR -
+            // asks crime activity intent to make the intent...returns the intent and then starts the activity
+            //      ASKS CRIME ACTIVITY FOR AN INTENT THAT WILL GET THE CrimeActivity STARTED.  THE METHOD REQUIES US TO PASS THE
+            //      CONTEXT, WHICH WE CAN GET FROM CALLING THE getActivity(), and the id of the crime we want
+            //      to start the activity with.   once we have the intent, we call the StartActivity method to start it.
+
+            // mCrime avail b/c declared at top and set in Bind method above
+
+            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getmID());   // sending activity and crime # from the crime
+
+            startActivity(intent);                   //        START A CRIME ACTIVITY FROM THIS - NEXT NEED TO GET THE VALUES FOR OUTPUT
         }
 
         }
