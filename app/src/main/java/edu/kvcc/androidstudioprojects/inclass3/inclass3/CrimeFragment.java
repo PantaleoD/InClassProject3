@@ -16,8 +16,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 
 public class CrimeFragment extends Fragment {
+
+    private static final String ARG_CRIME_ID = "crime_id";
+
 
 //  private  EditText mEditText;
 
@@ -26,17 +31,27 @@ public class CrimeFragment extends Fragment {
     private Button mDateButton;             // CHPT 8 added
     private CheckBox mSolvedCheckbox;
 
-
     private EditText mTitleField;
-    // This methods does not do the inflating of the view, like the onCreate for an activity does
 
+  public static CrimeFragment newInstance(UUID crimeId) {           // chpt 10  pg 198 ... best way to attach arguments to a fragment
+      Bundle args = new Bundle();
+      args.putSerializable(ARG_CRIME_ID, crimeId);
+
+    CrimeFragment fragment = new CrimeFragment();
+    fragment.setArguments(args);
+    return fragment;
+  }
+
+    // This methods does not do the inflating of the view, like the onCreate for an activity does
     @Override                       // used auto generator:   rt click - generate - override methods -
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mCrime = new Crime();           // make a new instance of a crime (the crime model)
-
-
+ //       mCrime = new Crime();           // make a new instance of a crime (the crime model)
+ //       UUID crimeId = (UUID) getActivity().getIntent()
+ //                       .getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);                   // take out chpt 10 pg 199 and add next line:
+        UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);                              // CHPT 10 Pg 196 ERROR WHY??? w/ chg in p199 no error hmmmm
     }
 // This method IS responsible for inflating the view
     //  & getting the content of the screen.
@@ -53,6 +68,9 @@ public class CrimeFragment extends Fragment {
         // working on text to be so added into fragment file:
 
        mTitleField = (EditText)v.findViewById(R.id.crime_title);  // here because do after a view is created/inflated before working with any data
+
+       mTitleField.setText(mCrime.getmTitle());                  // CHPT 10 p 196 shortcut of retrieving an extra
+
         mTitleField.addTextChangedListener(new TextWatcher() {     // next 3 methods are auto added when type T then hit tab
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -67,7 +85,7 @@ public class CrimeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                    // blank!!
+                // blank!!
             }
         });
 
@@ -76,6 +94,8 @@ public class CrimeFragment extends Fragment {
         mDateButton.setEnabled(false);
 
         mSolvedCheckbox = (CheckBox)v.findViewById(R.id.crime_solved);
+
+        mSolvedCheckbox.setChecked(mCrime.isSolved());                 // Chpt 10   p 196 shortcut of retrieving an extra
         mSolvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {   // checkbox is child of the compound button class.. hence new CompoundButton
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {

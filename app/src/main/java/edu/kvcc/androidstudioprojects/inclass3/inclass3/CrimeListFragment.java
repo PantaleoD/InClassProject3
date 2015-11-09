@@ -1,4 +1,5 @@
 package edu.kvcc.androidstudioprojects.inclass3.inclass3;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,6 +57,14 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
 
         return view;   // returns the created view
     }
+
+    //                  Chpt 10 pg 201  to save values upon resume  triggers updateUI to reload the list added onResume method here + code in updateUI
+    @Override
+    public  void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     // done at end but written before all the private classes
 
     //                  pg 184:  Once have adapter (below!)  will implement this updateUI method to set up the CrimeListFragment's user interface:.. it will
@@ -74,13 +83,20 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
 
          List<Crime> crimes = crimeLab.getCrimes();     // the list of crimes... using 'getter' from crime labs class
 
-         //                                 creates a new crimeAdapter and send it over the list of crimes so that
-         //                                             it can work w/ the recycler to display them
-         mAdapter = new CrimeAdapter(crimes);
+         if (mAdapter == null) {
 
-         //                     takes the Adapter we just created, and set it as the adapter that the
-         //                     recycler view is goint to use.
-         mCrimeRecyclerView.setAdapter(mAdapter);
+             //                                 creates a new crimeAdapter and send it over the list of crimes so that
+             //                                             it can work w/ the recycler to display them
+             mAdapter = new CrimeAdapter(crimes);
+
+             //                     takes the Adapter we just created, and set it as the adapter that the
+             //                     recycler view is goint to use.
+             mCrimeRecyclerView.setAdapter(mAdapter);
+         }
+         else
+         {
+             mAdapter.notifyDataSetChanged();
+         }
 
      }
 
@@ -162,8 +178,13 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
             //This mehtod will do the work of toasting the titel of the crime that was clicked upon.
         @Override
           public void onClick(View v){
-            Toast.makeText(getActivity(), mCrime.getmTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+  //          Toast.makeText(getActivity(), mCrime.getmTitle() + " clicked!", Toast.LENGTH_SHORT)
+  //                  .show();
+      //      Intent intent = new Intent(getActivity(), CrimeActivity.class);       // dch 10 explicit intent replace
+            //                  once create new intent method in CrimeAcdtivity.java with:
+            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getmID());
+            startActivity(intent);
+
         }
 
         }

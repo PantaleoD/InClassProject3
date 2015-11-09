@@ -1,19 +1,40 @@
 package edu.kvcc.androidstudioprojects.inclass3.inclass3;
 // FOR A SINZGLE CRIE
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;   // this was handled in the gradle app
 import android.support.v4.app.FragmentManager;    // support version of the fragement manager
 import android.os.Bundle;
 
-//public class CrimeActivity extends FragmentActivity {   take out in chpt 9 and replace w/
+import java.util.UUID;
+
+//public class CrimeActivity extends FragmentActivity {              take out in chpt 9 and replace w/
+
 public class CrimeActivity extends SingleFragmentActivity{         // the single fragment activity.... will inherit from the abstract activity called
+    //                                                            CHPT 10 p195  crash and burn....
+    private static final String EXTRA_CRIME_ID =    //              change from public to 'private' w/ pg 199 chpt and attaching arguments to a fragment
+            "edu.kvcc.androidstudioprojects.inclass3.inclass3.crime_id";
+
+    public static Intent newIntent(Context packageContext, UUID crimeId){
+        Intent intent = new Intent(packageContext, CrimeActivity.class);
+        intent.putExtra(EXTRA_CRIME_ID, crimeId);
+        return intent;
+    }
+
+
+
     @Override                      // added w Ch 9 - and Abstract Class called SingleFragmentActivity
-//              bc done each time... easier to use ONE fragment activity!   so use an abstract class                                                              // singlefragmentactivity
+//              bc done each time... easier to use ONE fragment activity!   so use an abstract class
+//                                      singlefragmentactivity
     protected Fragment createFragment(){
-        return  new CrimeFragment();
+     //   return  new CrimeFragment();            // take out w/ ch 10 pg 199 and add next lines to }
+        UUID crimeId = (UUID) getIntent()
+                        .getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(crimeId);
              }
-}
+ }
  /*   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
