@@ -197,8 +197,8 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
 
             // mCrime avail b/c declared at top and set in Bind method above
 
-            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getmID());   // sending activity and crime # from the crime
-
+   // replc'd in ch 11 w/nx line         Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getmID());   // sending activity and crime # from the crime
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getmID());
             startActivity(intent);                   //        START A CRIME ACTIVITY FROM THIS - NEXT NEED TO GET THE VALUES FOR OUTPUT
         }
 
