@@ -6,15 +6,20 @@
 package edu.kvcc.androidstudioprojects.inclass3.inclass3;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 import java.util.UUID;
 
 /**
  * Created by dpantaleo on 10/27/2015.
  */
-
 
 public class CrimeLab {
     private  static CrimeLab sCrimeLab;         // s = static / HOLDS THE INSTANCE OF CrimeLab
@@ -27,6 +32,11 @@ public class CrimeLab {
                                             // mCrimes holds an Array List (which is also a List (polymorphism) -
                                             // both valid types for mCrime
                                             //using List makes chg's later easier (if chg to, for ie: linklist)
+
+    //   need access to context to get access to file we wnat to read int
+    // class level variable toholdl context that is passed into the constructor. we will need access
+    //          to the context in order to read in the data file.  (could have used class vs create this)
+    private Context mContext;
 
                             // Context = object (will use in  chpt 14)
     // This is the method that will be used to get an instance of CrimeLab.  It will check to see if the current instance in the
@@ -58,13 +68,17 @@ public class CrimeLab {
         //              to make it easier...
         mCrimes = new ArrayList<>();      // makes a new array list
 
+        mContext = context;         // assign passed in context to the class level one mContext
+
+        loadCrimeList();
+/*
         for (int i = 0; i < 100; i++)       // loads 100 random crimes into the list - generates crimes
         {
             Crime crime = new Crime();
             crime.setmTitle("Crime #" + i);
             crime.setSolved(i % 2 == 0);    // set solved to every other crime created.
             mCrimes.add(crime);
-        }
+        }                           */
     }
 
     public  List<Crime> getCrimes() {                     // GETTER
@@ -85,4 +99,52 @@ public class CrimeLab {
     }
 
 
-}
+    // *********************  METHOD TO READ CSV FILE INTO CRIMES LIST:
+    //
+
+
+    private void loadCrimeList(){     // list defined at class level so ok to do ; read, parse using scanner oS
+        Scanner scanner;
+        scanner = null;                      // to ensure this has a value
+        try {
+            //          creates new scanner that open up the file in the raw directory call crimes
+            //          crimelab doesn't inherit from anything so can't use getResources()  so useing passed in refrecne
+            scanner = new Scanner(mContext.getResources().openRawResource(R.raw.crimes));  // opens file in raw resource folder
+
+            while (scanner.hasNextLine()) {
+                //          read file now:
+                String line = scanner.nextLine();
+                String parts[] = line.split(",");           // split on comma's
+
+                String id = parts[0];
+                String title = parts[1];
+                String dateString = parts[2];    // need to chg to date
+                String solved = parts[3];     //need to chg to boolean
+
+                // now cast data to correct  types:
+                UUID uuid = UUID.fromString(id);                                 // chg to UUID
+
+                boolean isSolved;
+                if (solved.equals("T")) {
+                    isSolved = true;
+                } else {
+                    isSolved = false;
+                }
+
+                Date date;
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);   // inputs as ymd if in  sql format so file is ymd
+                date = df.parse(dateString);
+
+                mCrimes.add(new Crime(uuid, title, date, isSolved));
+            }
+        }
+        catch (Exception e) {
+            Log.e("Read CSV file", e.toString());
+        }
+        finally {
+            scanner.close();
+        }
+      }
+    }
+
+

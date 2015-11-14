@@ -11,7 +11,11 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by dpantaleo on 10/27/2015.
@@ -168,8 +172,16 @@ public class CrimeListFragment extends Fragment {    // this is a fragment to be
                  mCrime = crime;                                 // variable bc has to outlive this method...
                 //                          made line above because w/intent and view holders...it's available!!! mCrime declared at top! class level!
                  mTitleTextView.setText(mCrime.getmTitle());     // set all the values for display
-                 mDateTextView.setText(mCrime.getDate().toString());
+
+                DateFormat df = new SimpleDateFormat("mm-dd-yyyy", Locale.ENGLISH);
+                 mDateTextView.setText(df.format(mCrime.getDate()));
+
                  mSolvedCheckBox.setChecked(mCrime.isSolved());
+
+
+
+
+
            }
 
                         //      called method to take in a crime instance and bind it to the controls

@@ -22,6 +22,13 @@ public class Crime {
            mDate = new Date();
        }
 
+    public Crime(UUID uuid, String title, Date date, Boolean isSolved ){    // done to read file in Crime Lab
+        mID = uuid;
+        mTitle = title;
+        mDate = date;
+        mSolved = isSolved;
+    }
+
     // getters and setters: - rt click - generate - getters & setters
 
 
